@@ -2,8 +2,8 @@
 #include<stdbool.h>
 // Process Blueprint.
 struct process { 
-    	int pid; //Process Id.
-    	int arrival_time;//the time when the process arrives for execution.
+    int pid; //Process Id.
+    int arrival_time;//the time when the process arrives for execution.
 	int burst_time;//estimated run time.
 	int wait_time;//0 as default. calculated as arrival time - burst time
     bool isCompleted;//to check if the process has been executed or not
@@ -14,6 +14,7 @@ void main()
 { 
     int i, j, t;//two loop variables and integer temporary variable respectively.
 	int sum_bt = 0;//to hold the sum of burst times
+  	float average_wait;
 	int size=5;//size of the array
   	//Process Array format: {pid,arrival time,burst time,wait time,isCompleted}
 	struct process p[]={{0,0,3,0,false},
@@ -74,10 +75,14 @@ void main()
         p[loc].wait_time = t - p[loc].arrival_time - p[loc].burst_time; 
         //Printing Order
         printf("p%d\t====>\t ",p[loc].pid);
+        // Sum Waiting Time for average 
+        average_wait += p[loc].wait_time;
     }
+    
     printf("Completed");
-	//Table representing the gantt chart of the scheduling
     printf("\n\n\tTable to visualsise the Gantt Chart");
+    //Average waiting time is calculated as sum of individual waiting times / number of process
+    printf("\n\tAverage waiting time : %.2f",average_wait/size);
     printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time"); 
     for(i=0;i<size;i++)
     {
