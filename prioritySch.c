@@ -6,6 +6,7 @@ struct process {
     int arrival_time;//the time when the process arrives for execution.
 	int burst_time;//estimated run time.
 	int wait_time;//0 as default. calculated as arrival time - burst time
+	int turnaround_time;//time interval from the time of submission of a process to the time of the completion of the process.
     bool isCompleted;//to check if the process has been executed or not
 };
 
@@ -14,14 +15,14 @@ void main()
 { 
     int i, j, t;//two loop variables and integer temporary variable respectively.
 	int sum_bt = 0;//to hold the sum of burst times
-  	float average_wait;
+  	float average_wait=0,average_tt=0;
 	int size=5;//size of the array
-  	//Process Array format: {pid,arrival time,burst time,wait time,isCompleted}
-	struct process p[]={{0,0,3,0,false},
-						{1,2,6,0,false},
-						{2,4,4,0,false},
-						{3,6,5,0,false},
-						{4,8,2,0,false}};
+  	//Process Array format: {pid,arrival time,burst time,wait time,turnaround time,isCompleted}
+	struct process p[]={{0,0,3,0,0,false},
+						{1,2,6,0,0,false},
+						{2,4,4,0,0,false},
+						{3,6,5,0,0,false},
+						{4,8,2,0,0,false}};
     struct process temporary;//for holding a process temporarily.
     
 	
@@ -77,17 +78,24 @@ void main()
         printf("p%d\t====>\t ",p[loc].pid);
         // Sum Waiting Time for average 
         average_wait += p[loc].wait_time;
+        // Calculation of Turn Around Time 
+        p[loc].turnaround_time = t - p[loc].arrival_time; 
+        // Sum Turn Around Time for average 
+        average_tt += p[loc].turnaround_time; 
     }
     
     printf("Completed");
-    printf("\n\n\tTable to visualsise the Gantt Chart");
+    printf("\n\n\tTable to visualsise the Gantt Chart\n");
+    printf("\r\r\t===================================");
     //Average waiting time is calculated as sum of individual waiting times / number of process
     printf("\n\tAverage waiting time : %.2f",average_wait/size);
-    printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time"); 
+    printf("\n\tAverage TurnAround time : %.2f",average_tt/size);
+    printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time"); 
     for(i=0;i<size;i++)
     {
 	
         printf("\np%i\t\t%d\t\t", p[i].pid, p[i].arrival_time); 
         printf("%d\t\t%d\t\t", p[i].burst_time, p[i].wait_time);
+        printf("%d",p[i].turnaround_time);
     }
 } 
