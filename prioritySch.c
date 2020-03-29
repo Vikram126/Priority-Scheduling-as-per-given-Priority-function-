@@ -48,9 +48,8 @@ void main()
 						*/
 						
     struct process temporary;//for holding a process temporarily.
-    
-	
-	// calculating total burst time or expected run time
+    	
+// calculating total burst time or expected run time
     for (i = 0; i < size; i++) { 
         sum_bt += p[i].burst_time; 
     } 
@@ -90,8 +89,7 @@ void main()
                     maxPriority = temp; 
                     // Storing Location 
                     loc = i; 
-                } 
-                
+                }  
             }
         }
         
@@ -136,9 +134,8 @@ void main()
     printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\t\tStatus"); 
     for(i=0;i<size;i++)
     {
-	
         printf("\np%i\t\t%d\t\t", p[i].pid, p[i].arrival_time); 
         printf("%d\t\t%d\t\t", p[i].burst_time, p[i].wait_time);
-        printf("%d\t\t%s",p[i].turnaround_time,p[i].isCompleted?"completed":"Failed");
+        printf("%d\t\t%s",p[i].turnaround_time,p[i].isCompleted?"Completed":"Failed");
     }
 } 
