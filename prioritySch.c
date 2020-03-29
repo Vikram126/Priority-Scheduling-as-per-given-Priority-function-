@@ -78,7 +78,7 @@ void main()
     		int loc; // Variable to store next process selected	
         for (i = 0; i < size; i++) { 
   
-            // Checking if process has arrived and is Incomplete 
+            // Check arrival time and state(completed/incomplete)  
             if (p[i].arrival_time <= t && !p[i].isCompleted) {  
                 // Calculating priority according to the problem statement
                 temp = (float)(p[i].burst_time + t-p[i].arrival_time) / p[i].burst_time; 
