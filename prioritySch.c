@@ -18,11 +18,35 @@ void main()
   	float average_wait=0,average_tt=0;
 	int size=5;//size of the array
   	//Process Array format: {pid,arrival time,burst time,wait time,turnaround time,isCompleted}
-	struct process p[]={{0,0,3,0,0,false},
-						{1,2,6,0,0,false},
+	struct process p[]={{0,5,4,0,0,false},
+						{1,5,6,0,0,false},
+						{2,5,3,0,0,false},
+						{3,20,1,0,0,false},
+						{4,5,2,0,0,false}};
+						
+					/*	Test case 1========Normal Case
+						{{0,0,3,0,0,false},
+						{1,2,5,0,0,false},
 						{2,4,4,0,0,false},
-						{3,6,5,0,0,false},
-						{4,8,2,0,0,false}};
+						{3,6,1,0,0,false},
+						{4,8,2,0,0,false}}
+						
+						Test case 2=========Same Arrival Times
+						{{0,5,3,0,0,false},
+						{1,5,5,0,0,false},
+						{2,5,4,0,0,false},
+						{3,5,1,0,0,false},
+						{4,5,2,0,0,false}}
+						
+						Test case 3
+						{{0,5,4,0,0,false},
+						{1,5,6,0,0,false},
+						{2,5,3,0,0,false},
+						{3,20,1,0,0,false},
+						{4,5,2,0,0,false}}
+						
+						*/
+						
     struct process temporary;//for holding a process temporarily.
     
 	
@@ -45,8 +69,8 @@ void main()
             } 
         } 
     } 
-    
-    printf("Order :\t");
+	
+    printf("\nOrder :\t");
     
     for (t = p[0].arrival_time; t < sum_bt;) { 
   
@@ -58,7 +82,8 @@ void main()
             // Checking if process has arrived and is Incomplete 
             if (p[i].arrival_time <= t && !p[i].isCompleted) {  
                 // Calculating priority according to the problem statement
-                temp = (p[i].burst_time + (t - p[i].arrival_time)) / p[i].burst_time; 
+                temp = (float)(p[i].burst_time + t-p[i].arrival_time) / p[i].burst_time; 
+                //printf("%f\n",temp);
                 // highest priority
                 if (maxPriority < temp) { 
                     // Storing the maximum priority process
@@ -66,8 +91,10 @@ void main()
                     // Storing Location 
                     loc = i; 
                 } 
-            } 
+                
+            }
         }
+        
         // Updating time value 
         t += p[loc].burst_time; 
         // Updating Completion Status 
@@ -83,19 +110,35 @@ void main()
         // Sum Turn Around Time for average 
         average_tt += p[loc].turnaround_time; 
     }
+    /*Special Condition========> when arrival time is same or there is an interval(idle), 
+	a process is skipped. (test case 2 and test case 3)
+    For better understanding disable the for-loop below and run the code.*/
+    for(i=0;i<size;i++)
+    {
+    	if(p[i].isCompleted==false)
+    	{
+    		p[i].isCompleted=true;
+    		t+=p[i].burst_time;
+    		p[i].wait_time=t-p[i].arrival_time-p[i].burst_time;
+    		printf("p%d\t====>\t ",p[i].pid); 
+        	average_wait += p[i].wait_time;
+        	p[i].turnaround_time = t - p[i].arrival_time;
+		}
+	}
     
+    //Info Related to scheduling
     printf("Completed");
     printf("\n\n\tTable to visualsise the Gantt Chart\n");
     printf("\r\r\t===================================");
     //Average waiting time is calculated as sum of individual waiting times / number of process
     printf("\n\tAverage waiting time : %.2f",average_wait/size);
     printf("\n\tAverage TurnAround time : %.2f",average_tt/size);
-    printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time"); 
+    printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\t\tStatus"); 
     for(i=0;i<size;i++)
     {
 	
         printf("\np%i\t\t%d\t\t", p[i].pid, p[i].arrival_time); 
         printf("%d\t\t%d\t\t", p[i].burst_time, p[i].wait_time);
-        printf("%d",p[i].turnaround_time);
+        printf("%d\t\t%s",p[i].turnaround_time,p[i].isCompleted?"completed":"Failed");
     }
 } 
