@@ -38,7 +38,7 @@ void main()
 						{3,5,1,0,0,false},
 						{4,5,2,0,0,false}}
 						
-						Test case 3
+						Test case 3=========Idle interval
 						{{0,5,4,0,0,false},
 						{1,5,6,0,0,false},
 						{2,5,3,0,0,false},
