@@ -50,17 +50,17 @@ void main()
     struct process temporary;//for holding a process temporarily.
     	
 // calculating total burst time or expected run time
-    for (i = 0; i < size; i++) { 
+    for (i = 0; i < size; i++)
+    { 
         sum_bt += p[i].burst_time; 
     } 
    
     // Sorting the structure by arrival times 
-    for (i = 0; i < size - 1; i++) { 
-       
-	    for (j = i + 1; j < size; j++) { 
-  
+    for (i = 0; i < size - 1; i++)
+    {
+	    for (j = i + 1; j < size; j++)
+	    { 
             if (p[i].arrival_time > p[j].arrival_time) { 
-  
                 // Swap earlier process to front 
                 temporary = p[i]; 
                 p[i] = p[j]; 
@@ -71,13 +71,13 @@ void main()
 	
     printf("\nOrder :\t");
     
-    for (t = p[0].arrival_time; t < sum_bt;) { 
-  
-  			float maxPriority = 0;//setting maximum priority to 0
-    		float temp; //to hold a priority value temporarily 
-    		int loc; // Variable to store next process selected	
-        for (i = 0; i < size; i++) { 
-  
+    for (t = p[0].arrival_time; t < sum_bt;)
+    { 
+  	float maxPriority = 0;//setting maximum priority to 0
+    	float temp; //to hold a priority value temporarily 
+    	int loc; // Variable to store next process selected	
+        for (i = 0; i < size; i++)
+	{ 
             // Check arrival time and state(completed/incomplete)  
             if (p[i].arrival_time <= t && !p[i].isCompleted) {  
                 // Calculating priority according to the problem statement
