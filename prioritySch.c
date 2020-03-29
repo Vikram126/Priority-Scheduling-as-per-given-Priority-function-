@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include<stdbool.h>
+#include<windows.h>
 // Process Blueprint.
 struct process { 
     int pid; //Process Id.
@@ -10,6 +11,12 @@ struct process {
     bool isCompleted;//to check if the process has been executed or not
 };
 
+void SetColor(int ForgC)
+	{
+		WORD wColor = ((0 & 0x0F) << 4) + (ForgC & 0x0F);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);		
+	}
+
 //main function  
 void main() 
 { 
@@ -18,11 +25,11 @@ void main()
   	float average_wait=0,average_tt=0;
 	int size=5;//size of the array
   	//Process Array format: {pid,arrival time,burst time,wait time,turnaround time,isCompleted}
-	struct process p[]={{0,5,4,0,0,false},
-						{1,5,6,0,0,false},
-						{2,5,3,0,0,false},
-						{3,20,1,0,0,false},
-						{4,5,2,0,0,false}};
+	struct process p[]={{1,0,6,0,0,false},
+						{2,0,2,0,0,false},
+						{3,0,8,0,0,false},
+						{4,0,3,0,0,false},
+						{5,0,4,0,0,false}};
 						
 					/*	Test case 1========Normal Case
 						{{0,0,3,0,0,false},
@@ -38,7 +45,7 @@ void main()
 						{3,5,1,0,0,false},
 						{4,5,2,0,0,false}}
 						
-						Test case 3=========Idle interval
+						Test case 3=========Idle time case
 						{{0,5,4,0,0,false},
 						{1,5,6,0,0,false},
 						{2,5,3,0,0,false},
@@ -48,8 +55,8 @@ void main()
 						*/
 						
     struct process temporary;//for holding a process temporarily.
-    	
-// calculating total burst time or expected run time
+	
+	// calculating total burst time or expected run time
     for (i = 0; i < size; i++) { 
         sum_bt += p[i].burst_time; 
     } 
@@ -89,7 +96,8 @@ void main()
                     maxPriority = temp; 
                     // Storing Location 
                     loc = i; 
-                }  
+                } 
+                
             }
         }
         
@@ -99,8 +107,11 @@ void main()
         p[loc].isCompleted = true;
          // Calculation of waiting time 
         p[loc].wait_time = t - p[loc].arrival_time - p[loc].burst_time; 
-        //Printing Order
-        printf("p%d\t====>\t ",p[loc].pid);
+        SetColor(9);
+		//Printing Order
+        printf("p%d",p[loc].pid);
+        SetColor(15);
+        printf("\t====>\t ");
         // Sum Waiting Time for average 
         average_wait += p[loc].wait_time;
         // Calculation of Turn Around Time 
@@ -108,9 +119,8 @@ void main()
         // Sum Turn Around Time for average 
         average_tt += p[loc].turnaround_time; 
     }
-    /*Special Condition========> when arrival time is same or there is an interval(idle), 
-	a process is skipped. (test case 2 and test case 3)
-    For better understanding disable the for-loop below and run the code.*/
+    //Special Condition========> when arrival time is same, a process is skipped.
+    //For better understanding disable the for-loop below and run the code.
     for(i=0;i<size;i++)
     {
     	if(p[i].isCompleted==false)
@@ -118,24 +128,31 @@ void main()
     		p[i].isCompleted=true;
     		t+=p[i].burst_time;
     		p[i].wait_time=t-p[i].arrival_time-p[i].burst_time;
+    		SetColor(9);
     		printf("p%d\t====>\t ",p[i].pid); 
+    		SetColor(15);
         	average_wait += p[i].wait_time;
         	p[i].turnaround_time = t - p[i].arrival_time;
 		}
 	}
     
-    //Info Related to scheduling
-    printf("Completed");
-    printf("\n\n\tTable to visualsise the Gantt Chart\n");
+    
+    printf("Completed\n\n\t");
+    	SetColor(11);
+    printf("Table to visualsise the Gantt Chart\n");
+    	SetColor(15);
     printf("\r\r\t===================================");
     //Average waiting time is calculated as sum of individual waiting times / number of process
     printf("\n\tAverage waiting time : %.2f",average_wait/size);
     printf("\n\tAverage TurnAround time : %.2f",average_tt/size);
     printf("\n\nPid\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\t\tStatus"); 
-    for(i=0;i<size;i++)
+	for(i=0;i<size;i++)
     {
+	
         printf("\np%i\t\t%d\t\t", p[i].pid, p[i].arrival_time); 
-        printf("%d\t\t%d\t\t", p[i].burst_time, p[i].wait_time);
-        printf("%d\t\t%s",p[i].turnaround_time,p[i].isCompleted?"Completed":"Failed");
+        printf("%d\t\t%d\t\t%d\t\t", p[i].burst_time, p[i].wait_time,p[i].turnaround_time);
+        SetColor(2);
+        printf("%s",p[i].isCompleted?"Completed":"Failed");
+        SetColor(15);
     }
 } 
